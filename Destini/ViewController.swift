@@ -11,6 +11,7 @@ import UIKit
 class ViewController: UIViewController {
 
     // Our strings
+    
     let story1 = "Your car has blown a tire on a winding road in the middle of nowhere with no cell phone reception. You decide to hitchhike. A rusty pickup truck rumbles to a stop next to you. A man with a wide brimmed hat with soulless eyes opens the passenger door for you and asks: \"Need a ride, boy?\"."
     let answer1a = "I\'ll hop in. Thanks for the help!"
     let answer1b = "Better ask him if he\'s a murderer first."
@@ -33,17 +34,17 @@ class ViewController: UIViewController {
     @IBOutlet weak var topButton: UIButton!         // Has TAG = 1
     @IBOutlet weak var bottomButton: UIButton!      // Has TAG = 2
     @IBOutlet weak var storyTextView: UILabel!
+    @IBOutlet weak var restartButton: UIButton!
     
     // TODO Step 5: Initialise instance variables here
-    
-    
-    
+    var storyIndex = 1
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         
         // TODO Step 3: Set the text for the storyTextView, topButton, bottomButton, and to T1_Story, T1_Ans1, and T1_Ans2
+        restart()
         
     }
 
@@ -52,14 +53,56 @@ class ViewController: UIViewController {
     @IBAction func buttonPressed(_ sender: UIButton) {
     
         // TODO Step 4: Write an IF-Statement to update the views
-                
         // TODO Step 6: Modify the IF-Statement to complete the story
+        if storyIndex == 1 && sender.tag == 2 {
+            storyIndex += 1
+            updateUI(story: story2, answerA: answer2a, answerB: answer2b)
+        } else if (storyIndex == 1 || storyIndex == 2) && sender.tag == 1 {
+            storyIndex = 3
+            updateUI(story: story3, answerA: answer3a, answerB: answer3b)
+        } else if storyIndex == 2 && sender.tag == 2 {
+            storyIndex += 2
+            updateUI(story: story4)
+        } else if storyIndex == 3 && sender.tag == 2 {
+            storyIndex += 2
+            updateUI(story: story5)
+        } else if sender.tag == 1 {
+            storyIndex += 3
+            updateUI(story: story6)
+        }
         
+        if storyIndex > 3 {
+            restartButton.isHidden = false
+        }
     
     }
     
-
-
-
+    @IBAction func restartPressed(_ sender: UIButton) {
+        restart()
+    }
+    
+    func updateUI(story : String, answerA : String? = nil, answerB : String? = nil) {
+        storyTextView.text = story
+        if answerA != nil {
+            topButton.setTitle(answerA, for: .normal)
+        } else {
+            topButton.isHidden = true
+        }
+        
+        if answerB != nil {
+            bottomButton.setTitle(answerB, for: .normal)
+        } else {
+            bottomButton.isHidden = true
+        }
+    }
+    
+    func restart() {
+        restartButton.isHidden = true
+        topButton.isHidden = false
+        bottomButton.isHidden = false
+        storyIndex = 1
+        updateUI(story: story1, answerA: answer1a, answerB: answer1b)
+    }
+    
 }
 
